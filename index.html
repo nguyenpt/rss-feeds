@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+   <title>RSS Feeds</title>
+   <meta charset="utf-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="author" content="Phong Nguyen">
+   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <meta name="description" content="RSS Feeds" />
+
+      <!--Bootstrap -->
+      <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+      <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+      <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+  <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+  <style>
+    body {
+      background-color: #000000;
+      color: white;
+    }
+    textarea {
+      color:black;
+    }
+  </style>
+
+  </head>
+
+  <body>
+
+    <p>Paste urls below, one per line.</p>
+    <textarea id="urlData" rows="15" cols="100">Input Urls</textarea>
+    <br /><br />
+    <button type="submit" id="submitButton">Submit</button>
+
+    <p>Extracted domains</p>
+    <textarea id="outputData" rows="15" cols="100">Output</textarea>
+
+    <div class="feed"></div>
+    <p class="feedInfo"></div>
+
+
+
+    <script>
+
+      /* Grabs the domain of the url*/
+      function extractDomain(url){
+        var domain;
+
+        if (url.indexOf("://") > -1){
+            domain = url.split('/')[2];
+        }
+        else {
+            domain = url.split('/')[0];
+        }
+
+        return domain;
+      }
+
+      /*Takes array arr and remove all duplicates and returns
+      a copy of array with no duplicates*/
+      function dedupeArray(arr){
+        var deDuped = arr.reduce(function(a,b){
+          if (a.indexOf(b) < 0) a.push(b);
+          return a;
+        }, [])
+
+        return deDuped;
+      }
+
+      function outputDomains(){
+        var output = [];
+        var outputString = "";
+        //var lines = $("#urlData").text().split('\n');
+        var lines = $("#urlData").val().split('\n');
+        for (var i = 0; i < lines.length; i++){
+          output.push(extractDomain(lines[i]));
+        }
+
+        var noDupes = dedupeArray(output);
+        /*for (var i = 0; i < noDupes.length; i++){
+          outputString += noDupes[i] + "\n";
+        }*/
+
+        find_RSS_feeds(noDupes);
+
+
+      }
+
+      $("#submitButton").click(function(){
+        outputDomains();
+      });
+      </script>
+      <script src="rssFeeds.js"></script>
+  </body>
+</html>
